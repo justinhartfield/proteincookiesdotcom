@@ -1,0 +1,94 @@
+{
+  "slug": "pack-gluten-free",
+  "display_title": "Gluten-Free Protein Muffins Pack | GF Flour Guide",
+  "pdf": "guides/pack-gluten-free.pdf",
+  "url": "https://proteinmuffins.com/pack-gluten-free.html",
+  "features": [
+    "GF Flour Conversion Matrix",
+    "Texture Troubleshooting Guide",
+    "6 Tested Recipes"
+  ],
+  "tables": [
+    {
+      "title": "GF flour conversion matrix",
+      "rows": [
+        [
+          "Flour",
+          "Swap ratio",
+          "Texture",
+          "Pro tip"
+        ],
+        [
+          "Almond Flour",
+          "1:1",
+          "Dense, moist",
+          "Add 1 extra egg for lift"
+        ],
+        [
+          "Oat Flour (GF)",
+          "1:1",
+          "Light, fluffy",
+          "Use certified GF oats only"
+        ],
+        [
+          "Coconut Flour",
+          "1:3",
+          "Very absorbent",
+          "Triple the liquid!"
+        ],
+        [
+          "GF 1-to-1 Blend",
+          "1:1",
+          "Most like wheat",
+          "Contains xanthan, no added binders needed"
+        ]
+      ]
+    },
+    {
+      "title": "Texture troubleshooting",
+      "rows": [
+        [
+          "Item",
+          "Details"
+        ],
+        [
+          "GUMMY CENTER",
+          "Reduce liquid by 15% or add 1 tbsp more flour"
+        ],
+        [
+          "TOO DRY",
+          "Add 2 tbsp Greek yogurt or applesauce"
+        ],
+        [
+          "DENSE BRICK",
+          "Separate eggs, fold in whipped whites last"
+        ]
+      ]
+    }
+  ],
+  "copy_blocks": {
+    "Headline ideas": [
+      "Gluten-Free Protein Pack: macro-verified muffin guides",
+      "Download the Gluten-Free Protein Pack PDF (free)",
+      "Gluten-Free Protein Pack - fast, repeatable protein muffins"
+    ],
+    "Subhead ideas": [
+      "Printable guide + matrices + make-ahead notes. Add your exact grams later.",
+      "Built from the landing page content so your PDF matches your offer.",
+      "Designed for easy HTML reuse: tables, bullets, and short sections."
+    ],
+    "Bullet ideas": [
+      "GF Flour Conversion Matrix",
+      "Texture Troubleshooting Guide",
+      "6 Tested Recipes",
+      "Add a 'Certified GF' ingredients checklist",
+      "Add binder guidance (xanthan/psyllium) as an HTML accordion"
+    ],
+    "CTA microcopy": [
+      "Get the PDF (instant)",
+      "Send me the guide",
+      "Download now"
+    ]
+  },
+  "generated": "2026-01-03"
+}

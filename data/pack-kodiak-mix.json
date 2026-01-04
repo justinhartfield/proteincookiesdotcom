@@ -1,0 +1,94 @@
+{
+  "slug": "pack-kodiak-mix",
+  "display_title": "Kodiak Mix Hacks Pack | Pancake Mix to Muffins",
+  "pdf": "guides/pack-kodiak-mix.pdf",
+  "url": "https://proteinmuffins.com/pack-kodiak-mix.html",
+  "features": [
+    "Mix-to-Muffin Conversion Tables",
+    "Bake Time Cheat Sheet",
+    "Protein Boosting Hacks"
+  ],
+  "tables": [
+    {
+      "title": "Mix comparison (landing page widget)",
+      "rows": [
+        [
+          "Mix",
+          "Protein",
+          "Muffin ratio",
+          "Bake time"
+        ],
+        [
+          "Kodiak Power Cakes",
+          "14g/serving",
+          "1 cup mix + 1/2 cup liquid",
+          "18-20 min"
+        ],
+        [
+          "Birch Benders Protein",
+          "12g/serving",
+          "1 cup mix + 2/3 cup liquid",
+          "16-18 min"
+        ],
+        [
+          "Krusteaz Protein",
+          "10g/serving",
+          "1 cup mix + 3/4 cup liquid",
+          "18-20 min"
+        ],
+        [
+          "Bob's Red Mill",
+          "6g/serving",
+          "1 cup mix + 1/2 cup liquid",
+          "20-22 min"
+        ]
+      ]
+    },
+    {
+      "title": "Protein boosting hacks",
+      "rows": [
+        [
+          "Item",
+          "Details"
+        ],
+        [
+          "REPLACE WATER",
+          "Use Fairlife milk instead of water. +8g protein per batch."
+        ],
+        [
+          "ADD EGG WHITES",
+          "1/2 cup liquid egg whites. +6g protein, better rise."
+        ],
+        [
+          "MIX IN CASEIN",
+          "1 scoop casein powder. +24g protein, fudgier texture."
+        ]
+      ]
+    }
+  ],
+  "copy_blocks": {
+    "Headline ideas": [
+      "The Mix Hacker'S Guide: macro-verified muffin guides",
+      "Download the The Mix Hacker'S Guide PDF (free)",
+      "The Mix Hacker'S Guide - fast, repeatable protein muffins"
+    ],
+    "Subhead ideas": [
+      "Printable guide + matrices + make-ahead notes. Add your exact grams later.",
+      "Built from the landing page content so your PDF matches your offer.",
+      "Designed for easy HTML reuse: tables, bullets, and short sections."
+    ],
+    "Bullet ideas": [
+      "Mix-to-Muffin Conversion Tables",
+      "Bake Time Cheat Sheet",
+      "Protein Boosting Hacks",
+      "Add a toggle for 'water vs milk vs egg whites' in HTML",
+      "Add a troubleshooting mini-table for gummy center vs dry"
+    ],
+    "CTA microcopy": [
+      "Get the PDF (instant)",
+      "Send me the guide",
+      "Download now"
+    ]
+  },
+  "generated": "2026-01-03"
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | ProteinCookies.com</title>
+    <meta name="robots" content="noindex">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'anton': ['Anton', 'sans-serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            500: '#00D4FF',
+                            900: '#0a1628',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .anton-text { font-family: 'Anton', sans-serif; letter-spacing: 0.05em; }
+    </style>
+</head>
+
+<body class="min-h-screen bg-brand-900 text-white font-sans flex items-center justify-center">
+    <div class="text-center px-4">
+        <h1 class="anton-text text-9xl text-brand-500 mb-4">404</h1>
+        <h2 class="anton-text text-3xl text-white mb-4">PAGE NOT FOUND</h2>
+        <p class="text-slate-400 mb-8 max-w-md mx-auto">Looks like this cookie crumbled. The page you're looking for doesn't exist or has been moved.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/" class="bg-brand-500 text-brand-900 px-8 py-3 rounded-xl font-bold hover:bg-brand-600 transition">
+                GO HOME
+            </a>
+            <a href="category-all.html" class="border border-brand-500 text-brand-500 px-8 py-3 rounded-xl font-bold hover:bg-brand-500/10 transition">
+                BROWSE RECIPES
+            </a>
+        </div>
+    </div>
+</body>
+</html>

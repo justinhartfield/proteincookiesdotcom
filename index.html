@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProteinCookies.com | The Hub for Macro-Verified Cookie Recipes</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Macro-verified protein cookie recipes with USDA nutrition data. 25+ recipes measured in grams for precise macros. Free recipe packs and printable cards.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://proteincookies.com/">
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ProteinCookies.com">
+    <meta property="og:title" content="ProteinCookies.com | Macro-Verified Protein Cookie Recipes">
+    <meta property="og:description"
+        content="25+ macro-verified protein cookie recipes with USDA nutrition data. Measured in grams for precise macros.">
+    <meta property="og:image" content="https://proteincookies.com/images/logo.png">
+    <meta property="og:url" content="https://proteincookies.com/">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ProteinCookies.com | Macro-Verified Protein Cookie Recipes">
+    <meta name="twitter:description" content="25+ macro-verified protein cookie recipes with USDA nutrition data.">
+    <meta name="twitter:image" content="https://proteincookies.com/images/logo.png">
+
+    <!-- Theme & Favicon -->
+    <meta name="theme-color" content="#00D4FF">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+
+    <!-- Performance: DNS Prefetch & Preconnect -->
+    <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Performance: Preload LCP Image -->
+    <link rel="preload" as="image" href="images/cookie-collection-hero.png">
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- WebSite + Organization Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ProteinCookies.com",
+      "url": "https://proteincookies.com/",
+      "description": "The ultimate destination for macro-verified protein cookie recipes. Every recipe is tested, measured in grams, and verified using USDA FoodData Central.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://proteincookies.com/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ProteinCookies.com",
+        "url": "https://proteincookies.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://proteincookies.com/images/logo.png",
+          "width": 512,
+          "height": 512
+        }
+      }
+    }
+    </script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'anton': ['Anton', 'sans-serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#e0faff',
+                            100: '#b3f3ff',
+                            500: '#00D4FF', // Cyan
+                            600: '#00b8e6',
+                            900: '#0a1628',
+                        },
+                        accent: {
+                            500: '#10b981', // Emerald
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .recipe-card:hover .recipe-overlay {
+            opacity: 1;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .glass-nav {
+            background: rgba(10, 22, 40, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .anton-text {
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .cyber-glow {
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .cyber-border {
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-brand-900 text-white font-sans" x-data="{ 
+    mobileMenu: false, 
+    filterDrawer: false,
+    searchQuery: '',
+    activeCategory: 'All',
+    proteinFilters: {
+        low: false,
+        medium: false,
+        high: false
+    },
+    methodFilters: {
+        noBake: false,
+        wheyBased: false,
+        glutenFree: false,
+        vegan: false
+    },
+    recipes: [
+        { id: 1, title: 'Chocolate Chip Protein Cookies', protein: 21, cals: 165, cat: 'Classic', img: 'recipe_images/chocolate-chip-protein-cookies.png', difficulty: 'Easy', time: '22m', tags: ['Chocolate Chip', 'Classic'], methods: ['whey'], url: 'chocolate-chip-protein-cookies.html' },
+        { id: 2, title: 'Peanut Butter Protein Cookies', protein: 24, cals: 185, cat: 'High Protein', img: 'recipe_images/peanut-butter-protein-cookies.png', difficulty: 'Beginner', time: '18m', tags: ['Peanut Butter', 'Flourless'], methods: ['whey'], url: 'peanut-butter-protein-cookies.html' },
+        { id: 3, title: 'No-Bake Protein Cookies', protein: 18, cals: 155, cat: 'Quick', img: 'recipe_images/no-bake-protein-cookies.png', difficulty: 'Beginner', time: '15m', tags: ['No-Bake', 'Quick'], methods: ['noBake'], url: 'no-bake-protein-cookies.html' },
+        { id: 4, title: 'Oatmeal Raisin Protein Cookies', protein: 19, cals: 170, cat: 'Classic', img: 'recipe_images/oatmeal-raisin-protein-cookies.png', difficulty: 'Easy', time: '26m', tags: ['Oatmeal', 'Fiber'], methods: ['whey'], url: 'oatmeal-raisin-protein-cookies.html' },
+        { id: 5, title: 'Double Chocolate Protein Cookies', protein: 22, cals: 175, cat: 'Dessert', img: 'recipe_images/double-chocolate-protein-cookies.png', difficulty: 'Easy', time: '22m', tags: ['Chocolate', 'Decadent'], methods: ['whey'], url: 'double-chocolate-protein-cookies.html' },
+        { id: 6, title: 'Snickerdoodle Protein Cookies', protein: 20, cals: 160, cat: 'Classic', img: 'recipe_images/snickerdoodle-protein-cookies.png', difficulty: 'Easy', time: '22m', tags: ['Cinnamon', 'Classic'], methods: ['whey'], url: 'snickerdoodle-protein-cookies.html' },
+        { id: 7, title: 'Birthday Cake Protein Cookies', protein: 19, cals: 165, cat: 'Dessert', img: 'recipe_images/birthday-cake-protein-cookies.png', difficulty: 'Easy', time: '24m', tags: ['Funfetti', 'Party'], methods: ['whey'], url: 'birthday-cake-protein-cookies.html' },
+        { id: 8, title: 'Vegan Protein Cookies', protein: 16, cals: 155, cat: 'Vegan', img: 'recipe_images/vegan-protein-cookies.png', difficulty: 'Medium', time: '26m', tags: ['Vegan', 'Plant-Based'], methods: ['vegan'], url: 'vegan-protein-cookies.html' },
+        { id: 9, title: 'Gluten-Free Protein Cookies', protein: 20, cals: 170, cat: 'Gluten-Free', img: 'recipe_images/gluten-free-protein-cookies.png', difficulty: 'Easy', time: '24m', tags: ['GF', 'Almond Flour'], methods: ['glutenFree'], url: 'gluten-free-protein-cookies.html' },
+        { id: 10, title: 'Protein Cookie Dough Bites', protein: 15, cals: 140, cat: 'Quick', img: 'recipe_images/protein-cookie-dough-bites.png', difficulty: 'Beginner', time: '10m', tags: ['No-Bake', 'Snack'], methods: ['noBake'], url: 'protein-cookie-dough-bites.html' },
+        { id: 11, title: 'White Chocolate Macadamia Cookies', protein: 18, cals: 180, cat: 'Dessert', img: 'recipe_images/white-chocolate-macadamia-protein-cookies.png', difficulty: 'Medium', time: '25m', tags: ['White Chocolate', 'Macadamia'], methods: ['whey'], url: 'white-chocolate-macadamia-protein-cookies.html' },
+        { id: 12, title: 'Protein Cookies for Kids', protein: 12, cals: 130, cat: 'Kids', img: 'recipe_images/protein-cookies-for-kids.png', difficulty: 'Easy', time: '22m', tags: ['Kids', 'Lunchbox'], methods: ['whey'], url: 'protein-cookies-for-kids.html' },
+        { id: 13, title: 'Cottage Cheese Protein Cookies', protein: 23, cals: 155, cat: 'High Protein', img: 'recipe_images/cottage-cheese-protein-cookies.png', difficulty: 'Easy', time: '24m', tags: ['Cottage Cheese', 'Soft'], methods: ['whey'], url: 'cottage-cheese-protein-cookies.html' },
+        { id: 14, title: 'Greek Yogurt Protein Cookies', protein: 21, cals: 150, cat: 'High Protein', img: 'recipe_images/greek-yogurt-protein-cookies.png', difficulty: 'Easy', time: '22m', tags: ['Greek Yogurt', 'Moist'], methods: ['whey'], url: 'greek-yogurt-protein-cookies.html' },
+        { id: 15, title: 'Almond Flour Protein Cookies', protein: 19, cals: 165, cat: 'Gluten-Free', img: 'recipe_images/almond-flour-protein-cookies.png', difficulty: 'Easy', time: '22m', tags: ['Almond Flour', 'Low Carb'], methods: ['glutenFree'], url: 'almond-flour-protein-cookies.html' },
+        { id: 16, title: 'Pumpkin Spice Protein Cookies', protein: 18, cals: 155, cat: 'Seasonal', img: 'recipe_images/pumpkin-spice-protein-cookies.png', difficulty: 'Easy', time: '26m', tags: ['Pumpkin', 'Fall'], methods: ['whey'], url: 'pumpkin-spice-protein-cookies.html' },
+        { id: 17, title: 'Lemon Protein Cookies', protein: 17, cals: 150, cat: 'Dessert', img: 'recipe_images/lemon-protein-cookies.png', difficulty: 'Easy', time: '24m', tags: ['Lemon', 'Citrus'], methods: ['whey'], url: 'lemon-protein-cookies.html' },
+        { id: 18, title: 'Monster Protein Cookies', protein: 20, cals: 185, cat: 'Dessert', img: 'recipe_images/monster-protein-cookies.png', difficulty: 'Medium', time: '28m', tags: ['Loaded', 'Fun'], methods: ['whey'], url: 'monster-protein-cookies.html' },
+        { id: 19, title: 'High Protein Cookies (30g)', protein: 30, cals: 210, cat: 'High Protein', img: 'recipe_images/high-protein-cookies-30g.png', difficulty: 'Medium', time: '25m', tags: ['30g+', 'Anabolic'], methods: ['whey'], url: 'high-protein-cookies-30g.html' },
+        { id: 20, title: 'Chocolate Peanut Butter Cookies', protein: 23, cals: 180, cat: 'Dessert', img: 'recipe_images/chocolate-peanut-butter-protein-cookies.png', difficulty: 'Easy', time: '24m', tags: ['Chocolate', 'Peanut Butter'], methods: ['whey'], url: 'chocolate-peanut-butter-protein-cookies.html' },
+        { id: 21, title: 'Banana Oat Protein Cookies', protein: 17, cals: 160, cat: 'Classic', img: 'recipe_images/banana-oat-protein-cookies.png', difficulty: 'Easy', time: '24m', tags: ['Banana', 'Oat'], methods: ['whey'], url: 'banana-oat-protein-cookies.html' },
+        { id: 22, title: 'Maple Pecan Protein Cookies', protein: 18, cals: 175, cat: 'Dessert', img: 'recipe_images/maple-pecan-protein-cookies.png', difficulty: 'Medium', time: '26m', tags: ['Maple', 'Pecan'], methods: ['whey'], url: 'maple-pecan-protein-cookies.html' },
+        { id: 23, title: 'Coconut Protein Cookies', protein: 16, cals: 165, cat: 'Dessert', img: 'recipe_images/coconut-protein-cookies.png', difficulty: 'Easy', time: '24m', tags: ['Coconut', 'Tropical'], methods: ['whey'], url: 'coconut-protein-cookies.html' },
+        { id: 24, title: 'Red Velvet Protein Cookies', protein: 19, cals: 160, cat: 'Dessert', img: 'recipe_images/red-velvet-protein-cookies.png', difficulty: 'Medium', time: '26m', tags: ['Red Velvet', 'Cream Cheese'], methods: ['whey'], url: 'red-velvet-protein-cookies.html' },
+        { id: 25, title: 'Espresso Protein Cookies', protein: 20, cals: 165, cat: 'Dessert', img: 'recipe_images/espresso-protein-cookies.png', difficulty: 'Easy', time: '22m', tags: ['Coffee', 'Espresso'], methods: ['whey'], url: 'espresso-protein-cookies.html' }
+    ],
+    get filteredRecipes() {
+        return this.recipes.filter(recipe => {
+            // Search filter
+            if (this.searchQuery && !recipe.title.toLowerCase().includes(this.searchQuery.toLowerCase())) {
+                return false;
+            }
+            // Category filter
+            if (this.activeCategory !== 'All' && recipe.cat !== this.activeCategory) {
+                return false;
+            }
+            // Protein range filters
+            const hasProteinFilter = this.proteinFilters.low || this.proteinFilters.medium || this.proteinFilters.high;
+            if (hasProteinFilter) {
+                const inLow = this.proteinFilters.low && recipe.protein >= 10 && recipe.protein < 18;
+                const inMedium = this.proteinFilters.medium && recipe.protein >= 18 && recipe.protein < 25;
+                const inHigh = this.proteinFilters.high && recipe.protein >= 25;
+                if (!inLow && !inMedium && !inHigh) return false;
+            }
+            // Method filters
+            const hasMethodFilter = this.methodFilters.noBake || this.methodFilters.wheyBased || this.methodFilters.glutenFree || this.methodFilters.vegan;
+            if (hasMethodFilter) {
+                const matchesNoBake = this.methodFilters.noBake && recipe.methods.includes('noBake');
+                const matchesWhey = this.methodFilters.wheyBased && recipe.methods.includes('whey');
+                const matchesGF = this.methodFilters.glutenFree && recipe.methods.includes('glutenFree');
+                const matchesVegan = this.methodFilters.vegan && recipe.methods.includes('vegan');
+                if (!matchesNoBake && !matchesWhey && !matchesGF && !matchesVegan) return false;
+            }
+            return true;
+        });
+    },
+    categories: ['All', 'Classic', 'High Protein', 'Dessert', 'Quick', 'Gluten-Free', 'Vegan', 'Kids', 'Seasonal']
+}">
+
+    <!-- Navigation -->
+    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 border-b border-brand-500/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="/" class="flex items-center space-x-3">
+                    <img src="images/logo.png" alt="ProteinCookies" class="h-12 w-12 rounded-xl">
+                    <span class="anton-text text-2xl text-brand-500">PROTEINCOOKIES</span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#recipes" class="text-slate-300 hover:text-brand-500 transition font-medium">Recipes</a>
+                    <a href="#packs" class="text-slate-300 hover:text-brand-500 transition font-medium">Recipe Packs</a>
+                    <a href="category-all.html" class="text-slate-300 hover:text-brand-500 transition font-medium">Categories</a>
+                    <a href="pack-starter.html"
+                        class="bg-brand-500 text-brand-900 px-6 py-2.5 rounded-xl font-bold hover:bg-brand-600 transition cyber-glow">
+                        GET FREE PACK
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button @click="mobileMenu = !mobileMenu" class="md:hidden text-white">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path x-show="!mobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                        <path x-show="mobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenu" x-cloak class="md:hidden bg-brand-900 border-t border-brand-500/20">
+            <div class="px-4 py-6 space-y-4">
+                <a href="#recipes" class="block text-slate-300 hover:text-brand-500 font-medium py-2">Recipes</a>
+                <a href="#packs" class="block text-slate-300 hover:text-brand-500 font-medium py-2">Recipe Packs</a>
+                <a href="category-all.html" class="block text-slate-300 hover:text-brand-500 font-medium py-2">Categories</a>
+                <a href="pack-starter.html"
+                    class="block bg-brand-500 text-brand-900 px-6 py-3 rounded-xl font-bold text-center">
+                    GET FREE PACK
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <!-- Background -->
+        <div class="absolute inset-0 z-0">
+            <img src="images/hero-bg.png" alt="" class="w-full h-full object-cover opacity-50">
+            <div class="absolute inset-0 bg-gradient-to-b from-brand-900/80 via-brand-900/60 to-brand-900"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="inline-flex items-center space-x-2 bg-brand-500/10 border border-brand-500/30 rounded-full px-4 py-2 mb-6">
+                        <span class="w-2 h-2 bg-brand-500 rounded-full animate-pulse"></span>
+                        <span class="text-brand-500 text-sm font-semibold">25+ MACRO-VERIFIED RECIPES</span>
+                    </div>
+                    <h1 class="anton-text text-5xl lg:text-7xl text-white leading-tight mb-6">
+                        PROTEIN COOKIES<br>
+                        <span class="text-brand-500">THAT ACTUALLY TASTE GOOD</span>
+                    </h1>
+                    <p class="text-xl text-slate-400 mb-8 max-w-lg">
+                        Every recipe measured in grams. Every macro verified with USDA data. 
+                        From classic chocolate chip to no-bake wonders, hit your protein goals without sacrificing flavor.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#recipes"
+                            class="bg-brand-500 text-brand-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-brand-600 transition cyber-glow text-center">
+                            BROWSE RECIPES
+                        </a>
+                        <a href="pack-starter.html"
+                            class="border-2 border-brand-500 text-brand-500 px-8 py-4 rounded-xl font-bold text-lg hover:bg-brand-500/10 transition text-center">
+                            FREE STARTER PACK
+                        </a>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="images/cookie-collection-hero.png" alt="Protein Cookie Collection"
+                        class="rounded-3xl shadow-2xl cyber-border">
+                    <div class="absolute -bottom-6 -left-6 bg-brand-900 border border-brand-500/30 rounded-2xl p-4 cyber-glow">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-brand-500 rounded-xl flex items-center justify-center">
+                                <span class="anton-text text-brand-900 text-lg">21g</span>
+                            </div>
+                            <div>
+                                <p class="text-white font-bold">Avg. Protein</p>
+                                <p class="text-slate-400 text-sm">Per Cookie</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Stats Bar -->
+        <section class="bg-brand-900 border-y border-brand-500/20 py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div>
+                        <p class="anton-text text-4xl text-brand-500">25+</p>
+                        <p class="text-slate-400 text-sm">Verified Recipes</p>
+                    </div>
+                    <div>
+                        <p class="anton-text text-4xl text-brand-500">21g</p>
+                        <p class="text-slate-400 text-sm">Avg. Protein</p>
+                    </div>
+                    <div>
+                        <p class="anton-text text-4xl text-brand-500">165</p>
+                        <p class="text-slate-400 text-sm">Avg. Calories</p>
+                    </div>
+                    <div>
+                        <p class="anton-text text-4xl text-brand-500">100%</p>
+                        <p class="text-slate-400 text-sm">USDA Verified</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recipe Grid Section -->
+        <section id="recipes" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="anton-text text-4xl lg:text-6xl text-white mb-4">THE RECIPE DATABASE</h2>
+                    <p class="text-slate-400 max-w-2xl mx-auto">Every recipe measured in grams for precise macros. Filter by protein level, method, or category to find your perfect cookie.</p>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Sidebar Filters -->
+                    <aside class="lg:w-72 flex-shrink-0 space-y-6">
+                        <!-- Search -->
+                        <div class="relative">
+                            <input type="text" x-model="searchQuery" placeholder="Search recipes..."
+                                class="w-full bg-brand-900 border border-brand-500/30 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                            <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+
+                        <!-- Categories -->
+                        <div class="bg-brand-900/50 border border-brand-500/20 rounded-2xl p-6">
+                            <h3 class="anton-text text-lg text-white mb-4">CATEGORIES</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <template x-for="cat in categories" :key="cat">
+                                    <button @click="activeCategory = cat"
+                                        :class="activeCategory === cat ? 'bg-brand-500 text-brand-900' : 'bg-brand-900 text-slate-400 border border-brand-500/30'"
+                                        class="px-4 py-2 rounded-lg text-sm font-semibold transition"
+                                        x-text="cat"></button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Protein Range -->
+                        <div class="bg-brand-900/50 border border-brand-500/20 rounded-2xl p-6">
+                            <h3 class="anton-text text-lg text-white mb-4">PROTEIN RANGE</h3>
+                            <div class="space-y-3">
+                                <label class="flex items-center space-x-3 cursor-pointer group">
+                                    <input type="checkbox" x-model="proteinFilters.low"
+                                        class="rounded border-brand-500/30 text-brand-500 focus:ring-brand-500 bg-brand-900">
+                                    <span class="text-slate-400 group-hover:text-white">10-17g (Light)</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer group">
+                                    <input type="checkbox" x-model="proteinFilters.medium"
+                                        class="rounded border-brand-500/30 text-brand-500 focus:ring-brand-500 bg-brand-900">
+                                    <span class="text-slate-400 group-hover:text-white">18-24g (Standard)</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer group">
+                                    <input type="checkbox" x-model="proteinFilters.high"
+                                        class="rounded border-brand-500/30 text-brand-500 focus:ring-brand-500 bg-brand-900">
+                                    <span class="text-slate-400 group-hover:text-white">25g+ (High)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Method Filters -->
+                        <div class="bg-brand-900/50 border border-brand-500/20 rounded-2xl p-6">
+                            <h3 class="anton-text text-lg text-white mb-4">METHOD</h3>
+                            <div class="space-y-3">
+                                <label class="flex items-center space-x-3 cursor-pointer group">
+                                    <input type="checkbox" x-model="methodFilters.noBake"
+                                        class="rounded border-brand-500/30 text-brand-500 focus:ring-brand-500 bg-brand-900">
+                                    <span class="text-slate-400 group-hover:text-white">No-Bake</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer group">
+                                    <input type="checkbox" x-model="methodFilters.wheyBased"
+                                        class="rounded border-brand-500/30 text-brand-500 focus:ring-brand-500 bg-brand-900">
+                                    <span class="text-slate-400 group-hover:text-white">Whey-Based</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer group">
+                                    <input type="checkbox" x-model="methodFilters.glutenFree"
+                                        class="rounded border-brand-500/30 text-brand-500 focus:ring-brand-500 bg-brand-900">
+                                    <span class="text-slate-400 group-hover:text-white">Gluten-Free</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer group">
+                                    <input type="checkbox" x-model="methodFilters.vegan"
+                                        class="rounded border-brand-500/30 text-brand-500 focus:ring-brand-500 bg-brand-900">
+                                    <span class="text-slate-400 group-hover:text-white">Vegan</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Lead Magnet -->
+                        <div class="bg-gradient-to-br from-brand-500/20 to-brand-500/5 border border-brand-500/30 rounded-2xl p-6">
+                            <h4 class="anton-text text-xl text-white mb-2">STARTER PACK</h4>
+                            <p class="text-slate-400 text-sm mb-4">5 Essential Recipes + Grocery List</p>
+                            <a href="pack-starter.html"
+                                class="block w-full bg-brand-500 text-brand-900 py-3 rounded-xl font-bold text-sm text-center hover:bg-brand-600 transition">
+                                GET FREE PDF
+                            </a>
+                        </div>
+                    </aside>
+
+                    <!-- Recipe Grid -->
+                    <div class="flex-grow">
+                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                            <template x-for="recipe in filteredRecipes" :key="recipe.id">
+                                <article
+                                    class="bg-brand-900/50 border border-brand-500/20 rounded-2xl overflow-hidden hover:border-brand-500/50 hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
+                                    <div class="relative h-56 overflow-hidden">
+                                        <img :src="recipe.img" :alt="recipe.title"
+                                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                        <div class="absolute top-4 left-4 bg-brand-900/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-500"
+                                            x-text="recipe.cat.toUpperCase()"></div>
+                                        <div
+                                            class="absolute top-4 right-4 bg-brand-500 text-brand-900 w-12 h-12 flex flex-col items-center justify-center rounded-xl">
+                                            <span class="text-sm anton-text leading-none" x-text="recipe.protein + 'g'"></span>
+                                            <span class="text-[8px] font-bold uppercase">Pro</span>
+                                        </div>
+                                        <div
+                                            class="absolute inset-0 bg-brand-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <a :href="recipe.url"
+                                                class="bg-brand-500 text-brand-900 px-6 py-2.5 rounded-xl font-bold">VIEW RECIPE</a>
+                                        </div>
+                                    </div>
+                                    <div class="p-5">
+                                        <div class="flex gap-2 mb-3">
+                                            <template x-for="tag in recipe.tags.slice(0, 2)">
+                                                <span class="text-[10px] px-2 py-0.5 bg-brand-500/10 text-brand-500 rounded font-semibold uppercase"
+                                                    x-text="tag"></span>
+                                            </template>
+                                        </div>
+                                        <h2 class="anton-text text-xl text-white leading-tight mb-4 group-hover:text-brand-500 transition"
+                                            x-text="recipe.title"></h2>
+                                        <div class="flex justify-between items-center pt-4 border-t border-brand-500/10">
+                                            <div class="flex flex-col">
+                                                <span class="text-[10px] text-slate-500 font-bold uppercase">Calories</span>
+                                                <span class="font-bold text-slate-300" x-text="recipe.cals + ' kcal'"></span>
+                                            </div>
+                                            <div class="flex flex-col items-end">
+                                                <span class="text-[10px] text-slate-500 font-bold uppercase">Time</span>
+                                                <span class="font-bold text-slate-300 flex items-center">
+                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    <span x-text="recipe.time"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </template>
+                        </div>
+
+                        <div class="mt-12 text-center">
+                            <p class="text-slate-500 mb-4">Showing <span x-text="filteredRecipes.length"></span> of 25 Verified Recipes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recipe Packs Section -->
+        <section id="packs" class="py-20 border-t border-brand-500/20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="anton-text text-4xl lg:text-6xl text-white mb-4">THE RECIPE PACKS</h2>
+                    <p class="text-slate-400 max-w-2xl mx-auto">Download curated recipe bundles with printable cards, gram-based shopping lists, and storage instructions.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Starter Pack -->
+                    <div class="bg-brand-900/50 border border-brand-500/30 rounded-2xl p-8 hover:border-brand-500 transition-all duration-300 group">
+                        <div class="w-16 h-16 bg-brand-500/20 text-brand-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="anton-text text-2xl text-white mb-2">STARTER PACK</h3>
+                        <p class="text-sm text-slate-400 mb-6">5 essential recipes to get you started with protein cookies.</p>
+                        <a href="pack-starter.html"
+                            class="text-brand-500 font-bold flex items-center group-hover:translate-x-2 transition-transform">
+                            GET FREE PDF <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- No-Bake Pack -->
+                    <div class="bg-brand-900/50 border border-brand-500/30 rounded-2xl p-8 hover:border-brand-500 transition-all duration-300 group">
+                        <div class="w-16 h-16 bg-accent-500/20 text-accent-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="anton-text text-2xl text-white mb-2">NO-BAKE PACK</h3>
+                        <p class="text-sm text-slate-400 mb-6">Quick recipes ready in 15 minutes or less. No oven required.</p>
+                        <a href="pack-no-bake.html"
+                            class="text-brand-500 font-bold flex items-center group-hover:translate-x-2 transition-transform">
+                            GET THE PDF <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Peanut Butter Lovers -->
+                    <div class="bg-brand-900/50 border border-brand-500/30 rounded-2xl p-8 hover:border-brand-500 transition-all duration-300 group">
+                        <div class="w-16 h-16 bg-orange-500/20 text-orange-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="anton-text text-2xl text-white mb-2">PB LOVERS PACK</h3>
+                        <p class="text-sm text-slate-400 mb-6">All the peanut butter recipes for the true PB enthusiast.</p>
+                        <a href="pack-peanut-butter.html"
+                            class="text-brand-500 font-bold flex items-center group-hover:translate-x-2 transition-transform">
+                            GET THE PDF <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Holiday Pack -->
+                    <div class="bg-gradient-to-br from-brand-500/20 to-brand-500/5 border border-brand-500 rounded-2xl p-8 hover:shadow-lg hover:shadow-brand-500/20 transition-all duration-300 group">
+                        <div class="w-16 h-16 bg-brand-500 text-brand-900 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="anton-text text-2xl text-white mb-2">HOLIDAY PACK</h3>
+                        <p class="text-sm text-slate-400 mb-6">Festive protein cookies for every holiday celebration.</p>
+                        <a href="pack-holiday.html"
+                            class="text-brand-500 font-bold flex items-center group-hover:translate-x-2 transition-transform">
+                            GET THE PDF <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Additional Packs Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <!-- Kids Lunchbox Pack -->
+                    <div class="bg-brand-900/50 border border-brand-500/30 rounded-2xl p-8 hover:border-brand-500 transition-all duration-300 group flex items-center">
+                        <div class="w-16 h-16 bg-pink-500/20 text-pink-500 rounded-2xl flex items-center justify-center mr-6 group-hover:scale-110 transition-transform flex-shrink-0">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="anton-text text-2xl text-white mb-1">KIDS' LUNCHBOX PACK</h3>
+                            <p class="text-sm text-slate-400">Kid-approved recipes perfect for school lunches and snacks.</p>
+                        </div>
+                        <a href="pack-kids.html" class="text-brand-500 font-bold ml-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- High Protein Pack -->
+                    <div class="bg-brand-900/50 border border-brand-500/30 rounded-2xl p-8 hover:border-brand-500 transition-all duration-300 group flex items-center">
+                        <div class="w-16 h-16 bg-red-500/20 text-red-500 rounded-2xl flex items-center justify-center mr-6 group-hover:scale-110 transition-transform flex-shrink-0">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="anton-text text-2xl text-white mb-1">25g+ MUSCLE PACK</h3>
+                            <p class="text-sm text-slate-400">Maximum protein recipes for serious gains.</p>
+                        </div>
+                        <a href="pack-high-protein.html" class="text-brand-500 font-bold ml-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-brand-900 border-t border-brand-500/30 p-4">
+        <a href="pack-starter.html"
+            class="w-full bg-brand-500 text-brand-900 py-4 rounded-xl anton-text flex items-center justify-center space-x-3 text-lg cyber-glow">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+            </svg>
+            <span>GET FREE STARTER PACK</span>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-brand-900 border-t border-brand-500/20 pt-16 pb-24 md:pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+                <!-- Brand Column -->
+                <div class="lg:col-span-1">
+                    <a href="/" class="flex items-center space-x-3 mb-5">
+                        <img src="images/logo.png" alt="ProteinCookies" class="h-12 w-12 rounded-xl">
+                        <span class="anton-text text-xl text-brand-500">PROTEINCOOKIES</span>
+                    </a>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        The ultimate destination for macro-verified protein cookie recipes. Every recipe is tested,
+                        measured in grams, and verified using USDA FoodData Central for accurate nutrition facts.
+                    </p>
+                </div>
+
+                <!-- Popular Recipes -->
+                <div>
+                    <h4 class="anton-text text-lg mb-5 text-white">POPULAR RECIPES</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="chocolate-chip-protein-cookies.html" class="text-slate-400 hover:text-brand-500 transition">Chocolate Chip Protein Cookies</a></li>
+                        <li><a href="peanut-butter-protein-cookies.html" class="text-slate-400 hover:text-brand-500 transition">Peanut Butter Protein Cookies</a></li>
+                        <li><a href="no-bake-protein-cookies.html" class="text-slate-400 hover:text-brand-500 transition">No-Bake Protein Cookies</a></li>
+                        <li><a href="high-protein-cookies-30g.html" class="text-slate-400 hover:text-brand-500 transition">High Protein Cookies (30g)</a></li>
+                        <li><a href="birthday-cake-protein-cookies.html" class="text-slate-400 hover:text-brand-500 transition">Birthday Cake Protein Cookies</a></li>
+                        <li><a href="double-chocolate-protein-cookies.html" class="text-slate-400 hover:text-brand-500 transition">Double Chocolate Protein Cookies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Recipe Packs -->
+                <div>
+                    <h4 class="anton-text text-lg mb-5 text-white">RECIPE PACKS</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="pack-starter.html" class="text-slate-400 hover:text-brand-500 transition">Starter Pack (Free)</a></li>
+                        <li><a href="pack-no-bake.html" class="text-slate-400 hover:text-brand-500 transition">No-Bake Pack</a></li>
+                        <li><a href="pack-peanut-butter.html" class="text-slate-400 hover:text-brand-500 transition">Peanut Butter Lovers Pack</a></li>
+                        <li><a href="pack-holiday.html" class="text-slate-400 hover:text-brand-500 transition">Holiday Cookie Pack</a></li>
+                        <li><a href="pack-kids.html" class="text-slate-400 hover:text-brand-500 transition">Kids' Lunchbox Pack</a></li>
+                        <li><a href="pack-high-protein.html" class="text-slate-400 hover:text-brand-500 transition">25g+ Muscle Pack</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources -->
+                <div>
+                    <h4 class="anton-text text-lg mb-5 text-white">RESOURCES</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="category-all.html" class="text-slate-400 hover:text-brand-500 transition">All Recipes</a></li>
+                        <li><a href="category-classic.html" class="text-slate-400 hover:text-brand-500 transition">Classic Cookies</a></li>
+                        <li><a href="category-high-protein.html" class="text-slate-400 hover:text-brand-500 transition">High Protein Cookies</a></li>
+                        <li><a href="category-gluten-free.html" class="text-slate-400 hover:text-brand-500 transition">Gluten-Free Cookies</a></li>
+                        <li><a href="category-vegan.html" class="text-slate-400 hover:text-brand-500 transition">Vegan Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-brand-500/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-500 text-xs font-medium">© 2026 ProteinCookies.com. All rights reserved. Data by USDA FoodData Central.</p>
+                <div class="flex items-center space-x-6 text-xs font-medium">
+                    <a href="privacy.html" class="text-slate-500 hover:text-white transition">Privacy Policy</a>
+                    <a href="terms.html" class="text-slate-500 hover:text-white transition">Terms of Use</a>
+                    <a href="sitemap.html" class="text-slate-500 hover:text-white transition">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

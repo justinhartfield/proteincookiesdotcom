@@ -1,0 +1,110 @@
+{
+  "slug": "pack-starter",
+  "display_title": "Starter Pack | Top 10 Macro-Verified Protein Muffin Recipes",
+  "pdf": "guides/pack-starter.pdf",
+  "url": "https://proteinmuffins.com/pack-starter.html",
+  "features": [
+    "10 Verified Recipes (Banana to Double Choc)",
+    "Precise Shopping List (Grams + Cups)",
+    "Freezer Guide + Reheating Times"
+  ],
+  "tables": [
+    {
+      "title": "Recipes included (from landing page)",
+      "rows": [
+        [
+          "Recipe",
+          "Protein",
+          "Calories",
+          "Bake time"
+        ],
+        [
+          "Banana",
+          "19g",
+          "136",
+          "18min"
+        ],
+        [
+          "Blueberry",
+          "19g",
+          "133",
+          "20min"
+        ],
+        [
+          "Chocolate Chip",
+          "19g",
+          "133",
+          "18min"
+        ],
+        [
+          "Pumpkin",
+          "19g",
+          "119",
+          "22min"
+        ],
+        [
+          "Apple",
+          "19g",
+          "125",
+          "22min"
+        ],
+        [
+          "Double Chocolate",
+          "19g",
+          "138",
+          "20min"
+        ],
+        [
+          "Carrot Cake",
+          "19g",
+          "130",
+          "22min"
+        ],
+        [
+          "Zucchini",
+          "19g",
+          "128",
+          "22min"
+        ],
+        [
+          "Lemon Blueberry",
+          "19g",
+          "125",
+          "20min"
+        ],
+        [
+          "Cottage Cheese",
+          "19g",
+          "143",
+          "20min"
+        ]
+      ]
+    }
+  ],
+  "copy_blocks": {
+    "Headline ideas": [
+      "The Starter Pack: macro-verified muffin guides",
+      "Download the The Starter Pack PDF (free)",
+      "The Starter Pack - fast, repeatable protein muffins"
+    ],
+    "Subhead ideas": [
+      "Printable guide + matrices + make-ahead notes. Add your exact grams later.",
+      "Built from the landing page content so your PDF matches your offer.",
+      "Designed for easy HTML reuse: tables, bullets, and short sections."
+    ],
+    "Bullet ideas": [
+      "10 Verified Recipes (Banana to Double Choc)",
+      "Precise Shopping List (Grams + Cups)",
+      "Freezer Guide + Reheating Times",
+      "Shopping list section (add grams + cups)",
+      "Freezer + reheating times included",
+      "Best-first recipes highlighted for onboarding"
+    ],
+    "CTA microcopy": [
+      "Get the PDF (instant)",
+      "Send me the guide",
+      "Download now"
+    ]
+  },
+  "generated": "2026-01-03"
+}

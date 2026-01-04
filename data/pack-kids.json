@@ -1,0 +1,118 @@
+{
+  "slug": "pack-kids",
+  "display_title": "Kids Protein Muffins Pack | Lunchbox-Ready Recipes",
+  "pdf": "guides/pack-kids.pdf",
+  "url": "https://proteinmuffins.com/pack-kids.html",
+  "features": [
+    "6 Kid-Approved Recipes",
+    "Mini Muffin Conversion",
+    "Allergy Label Guide"
+  ],
+  "tables": [
+    {
+      "title": "Mix-ins kids actually eat",
+      "rows": [
+        [
+          "Item",
+          "Details"
+        ],
+        [
+          "Choc Chips",
+          "100% approval"
+        ],
+        [
+          "Blueberries",
+          "95% approval"
+        ],
+        [
+          "Banana",
+          "85% approval"
+        ],
+        [
+          "Carrot (hidden)",
+          "80% stealth"
+        ]
+      ]
+    },
+    {
+      "title": "Standard vs mini conversion",
+      "rows": [
+        [
+          "Format",
+          "Pan",
+          "Protein",
+          "Best for",
+          "Bake time"
+        ],
+        [
+          "Standard",
+          "12-cup",
+          "8-10g",
+          "Ages 6+",
+          "18-20 min"
+        ],
+        [
+          "Mini muffins",
+          "24-cup",
+          "3-4g each",
+          "All ages",
+          "10-12 min"
+        ]
+      ]
+    },
+    {
+      "title": "Allergy label guide (template)",
+      "rows": [
+        [
+          "Label",
+          "Notes"
+        ],
+        [
+          "Nut-free",
+          "Include if recipe excludes nuts + processed in nut-free facility (if applicable)."
+        ],
+        [
+          "GF options",
+          "Mark gluten-free variants or swaps."
+        ],
+        [
+          "Dairy-free",
+          "Mark dairy-free swaps."
+        ],
+        [
+          "Egg-free",
+          "Mark egg-free swaps."
+        ],
+        [
+          "Vegan",
+          "Mark vegan variants."
+        ]
+      ]
+    }
+  ],
+  "copy_blocks": {
+    "Headline ideas": [
+      "Lunchbox Ready: macro-verified muffin guides",
+      "Download the Lunchbox Ready PDF (free)",
+      "Lunchbox Ready - fast, repeatable protein muffins"
+    ],
+    "Subhead ideas": [
+      "Printable guide + matrices + make-ahead notes. Add your exact grams later.",
+      "Built from the landing page content so your PDF matches your offer.",
+      "Designed for easy HTML reuse: tables, bullets, and short sections."
+    ],
+    "Bullet ideas": [
+      "6 Kid-Approved Recipes",
+      "Mini Muffin Conversion",
+      "Allergy Label Guide",
+      "Add a lunchbox packing checklist section to HTML",
+      "Add a 'mini muffins' toggle for bake time + macro scaling"
+    ],
+    "CTA microcopy": [
+      "Get the PDF (instant)",
+      "Send me the guide",
+      "Download now"
+    ]
+  },
+  "generated": "2026-01-03"
+}

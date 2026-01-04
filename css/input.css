@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+[x-cloak] {
+    display: none !important;
+}
+
+.recipe-card:hover .recipe-overlay {
+    opacity: 1;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.glass-nav {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.anton-text {
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 0.05em;
+}
