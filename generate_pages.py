@@ -1,75 +1,34 @@
 #!/usr/bin/env python3
-"""Generate all recipe pages for ProteinCookies.com from JSON data."""
+"""
+Generate Recipe Pages for ProteinCookies.com - Light Theme
+"""
 
 import json
-import os
 
-# Load recipe data
+# Load recipes
 with open('data/recipes.json', 'r') as f:
     data = json.load(f)
+    recipes = data['recipes']
 
-recipes = data['recipes']
-
-# Recipe page template
-def generate_recipe_page(recipe):
-    ingredients_html = '\n'.join([f'<li class="flex items-start space-x-3"><span class="w-2 h-2 bg-brand-500 rounded-full mt-2 flex-shrink-0"></span><span>{ing}</span></li>' for ing in recipe['ingredients']])
-    
-    instructions_html = '\n'.join([f'''
-    <div class="flex gap-6">
-        <div class="flex-shrink-0 w-12 h-12 bg-brand-500 text-brand-900 rounded-xl flex items-center justify-center font-bold text-lg">{i+1}</div>
-        <div>
-            <h4 class="font-bold text-white mb-2">{step['step']}</h4>
-            <p class="text-slate-400">{step['text']}</p>
-        </div>
-    </div>''' for i, step in enumerate(recipe['instructions'])])
-    
-    tags_html = ' '.join([f'<span class="text-xs px-3 py-1 bg-brand-500/10 text-brand-500 rounded-full font-semibold">{tag}</span>' for tag in recipe['tags']])
-    
-    # Get related recipes (same category, different recipe)
-    related = [r for r in recipes if r['category'] == recipe['category'] and r['id'] != recipe['id']][:3]
-    if len(related) < 3:
-        related += [r for r in recipes if r['id'] != recipe['id'] and r not in related][:3-len(related)]
-    
-    related_html = '\n'.join([f'''
-    <a href="{r['slug']}.html" class="bg-brand-900/50 border border-brand-500/20 rounded-2xl overflow-hidden hover:border-brand-500/50 transition-all group">
-        <div class="relative h-40 overflow-hidden">
-            <img src="recipe_images/{r['image']}" alt="{r['title']}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-            <div class="absolute top-3 right-3 bg-brand-500 text-brand-900 w-10 h-10 flex flex-col items-center justify-center rounded-lg">
-                <span class="text-xs anton-text leading-none">{r['protein']}g</span>
-            </div>
-        </div>
-        <div class="p-4">
-            <h4 class="anton-text text-lg text-white group-hover:text-brand-500 transition">{r['title']}</h4>
-            <p class="text-sm text-slate-400">{r['calories']} cal · {r['totalTime']}m</p>
-        </div>
-    </a>''' for r in related])
-    
-    html = f'''<!DOCTYPE html>
+RECIPE_TEMPLATE = '''<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{recipe['title']} | ProteinCookies.com</title>
+    <title>{title} | ProteinCookies.com</title>
     
-    <meta name="description" content="{recipe['description']}">
+    <meta name="description" content="{description}">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://proteincookies.com/{recipe['slug']}.html">
+    <link rel="canonical" href="https://proteincookies.com/{slug}.html">
     
     <meta property="og:type" content="article">
-    <meta property="og:site_name" content="ProteinCookies.com">
-    <meta property="og:title" content="{recipe['title']} | ProteinCookies.com">
-    <meta property="og:description" content="{recipe['description']}">
-    <meta property="og:image" content="https://proteincookies.com/recipe_images/{recipe['image']}">
-    <meta property="og:url" content="https://proteincookies.com/{recipe['slug']}.html">
+    <meta property="og:title" content="{title} | ProteinCookies.com">
+    <meta property="og:description" content="{description}">
+    <meta property="og:image" content="https://proteincookies.com/recipe_images/{image}">
+    <meta property="og:url" content="https://proteincookies.com/{slug}.html">
     
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{recipe['title']}">
-    <meta name="twitter:description" content="{recipe['description']}">
-    <meta name="twitter:image" content="https://proteincookies.com/recipe_images/{recipe['image']}">
-    
-    <meta name="theme-color" content="#00D4FF">
+    <meta name="theme-color" content="#f59e0b">
     <link rel="icon" type="image/png" href="/images/favicon.png">
-    <link rel="apple-touch-icon" href="/images/logo.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -79,28 +38,29 @@ def generate_recipe_page(recipe):
     
     <script type="application/ld+json">
     {{
-        "@context": "https://schema.org/",
-        "@type": "Recipe",
-        "name": "{recipe['title']}",
-        "image": "https://proteincookies.com/recipe_images/{recipe['image']}",
-        "description": "{recipe['description']}",
-        "prepTime": "PT{recipe['prepTime']}M",
-        "cookTime": "PT{recipe['cookTime']}M",
-        "totalTime": "PT{recipe['totalTime']}M",
-        "recipeYield": "{recipe['yield']}",
-        "recipeCategory": "Dessert",
-        "recipeCuisine": "American",
-        "nutrition": {{
-            "@type": "NutritionInformation",
-            "calories": "{recipe['calories']} calories",
-            "proteinContent": "{recipe['protein']}g",
-            "carbohydrateContent": "{recipe['carbs']}g",
-            "fatContent": "{recipe['fat']}g",
-            "fiberContent": "{recipe['fiber']}g",
-            "sugarContent": "{recipe['sugar']}g"
-        }},
-        "recipeIngredient": {json.dumps(recipe['ingredients'])},
-        "recipeInstructions": {json.dumps([{"@type": "HowToStep", "text": step['text']} for step in recipe['instructions']])}
+      "@context": "https://schema.org/",
+      "@type": "Recipe",
+      "name": "{title}",
+      "description": "{description}",
+      "image": "https://proteincookies.com/recipe_images/{image}",
+      "author": {{"@type": "Organization", "name": "ProteinCookies.com"}},
+      "prepTime": "PT{prepTime}M",
+      "cookTime": "PT{cookTime}M",
+      "totalTime": "PT{totalTime}M",
+      "recipeYield": "{yield_amount}",
+      "recipeCategory": "Cookies",
+      "recipeCuisine": "American",
+      "nutrition": {{
+        "@type": "NutritionInformation",
+        "calories": "{calories} calories",
+        "proteinContent": "{protein}g",
+        "carbohydrateContent": "{carbs}g",
+        "fatContent": "{fat}g",
+        "fiberContent": "{fiber}g",
+        "sugarContent": "{sugar}g"
+      }},
+      "recipeIngredient": {ingredients_json},
+      "recipeInstructions": {instructions_json}
     }}
     </script>
     
@@ -114,11 +74,11 @@ def generate_recipe_page(recipe):
                     }},
                     colors: {{
                         brand: {{
-                            50: '#e0faff',
-                            100: '#b3f3ff',
-                            500: '#00D4FF',
-                            600: '#00b8e6',
-                            900: '#0a1628',
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            900: '#451a03',
                         }},
                         accent: {{
                             500: '#10b981',
@@ -130,248 +90,218 @@ def generate_recipe_page(recipe):
     </script>
     <style>
         .anton-text {{ font-family: 'Anton', sans-serif; letter-spacing: 0.05em; }}
-        .glass-nav {{ background: rgba(10, 22, 40, 0.9); backdrop-filter: blur(12px); }}
-        .cyber-glow {{ box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }}
+        .glass-nav {{ background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }}
     </style>
 </head>
 
-<body class="min-h-screen bg-brand-900 text-white font-sans">
+<body class="min-h-screen bg-slate-50 text-slate-900 font-sans">
     <!-- Navigation -->
-    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 border-b border-brand-500/20">
+    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <a href="/" class="flex items-center space-x-3">
-                    <img src="images/logo.png" alt="ProteinCookies" class="h-12 w-12 rounded-xl">
-                    <span class="anton-text text-2xl text-brand-500">PROTEINCOOKIES</span>
+                    <img src="images/logo.png" alt="ProteinCookies" class="h-12 w-12 rounded-xl shadow-lg">
+                    <span class="anton-text text-2xl text-brand-600">PROTEINCOOKIES</span>
                 </a>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="/#recipes" class="text-slate-300 hover:text-brand-500 transition font-medium">Recipes</a>
-                    <a href="/#packs" class="text-slate-300 hover:text-brand-500 transition font-medium">Recipe Packs</a>
-                    <a href="category-all.html" class="text-slate-300 hover:text-brand-500 transition font-medium">Categories</a>
-                    <a href="pack-starter.html" class="bg-brand-500 text-brand-900 px-6 py-2.5 rounded-xl font-bold hover:bg-brand-600 transition cyber-glow">GET FREE PACK</a>
+                    <a href="/" class="text-slate-600 hover:text-brand-600 font-semibold text-sm uppercase tracking-wider">Recipes</a>
+                    <a href="category-all.html" class="text-slate-600 hover:text-brand-600 font-semibold text-sm uppercase tracking-wider">Categories</a>
+                    <a href="pack-starter.html" class="bg-brand-600 text-white px-5 py-2.5 rounded-full font-bold text-sm hover:bg-brand-900 transition">STARTER PACK</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <main class="pt-20">
-        <!-- Hero Section -->
-        <section class="relative py-12 lg:py-20">
+        <!-- Breadcrumb -->
+        <div class="bg-white border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <nav class="flex text-sm text-slate-500">
+                    <a href="/" class="hover:text-brand-600">Home</a>
+                    <span class="mx-2">/</span>
+                    <a href="category-{category_slug}.html" class="hover:text-brand-600">{category}</a>
+                    <span class="mx-2">/</span>
+                    <span class="text-slate-900">{title}</span>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Recipe Header -->
+        <section class="bg-white py-8 lg:py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-12 items-start">
+                <div class="grid lg:grid-cols-2 gap-8 lg:gap-12">
                     <!-- Image -->
                     <div class="relative">
-                        <img src="recipe_images/{recipe['image']}" alt="{recipe['title']}" class="w-full rounded-3xl shadow-2xl border border-brand-500/20">
-                        <div class="absolute top-6 left-6 bg-brand-900/90 backdrop-blur px-4 py-2 rounded-full">
-                            <span class="text-brand-500 font-bold text-sm">{recipe['category'].upper()}</span>
-                        </div>
+                        <img src="recipe_images/{image}" alt="{title}" class="w-full rounded-2xl shadow-xl">
+                        <span class="absolute top-4 left-4 bg-brand-600 text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg">{protein}g PROTEIN</span>
                     </div>
                     
                     <!-- Info -->
                     <div>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            {tags_html}
-                        </div>
-                        <h1 class="anton-text text-4xl lg:text-5xl text-white mb-4">{recipe['title'].upper()}</h1>
-                        <p class="text-lg text-slate-400 mb-8">{recipe['description']}</p>
+                        <span class="inline-block px-3 py-1 bg-brand-100 text-brand-600 text-xs font-bold uppercase tracking-wider rounded-full mb-4">{category}</span>
+                        <h1 class="anton-text text-4xl lg:text-5xl text-slate-900 mb-4">{title_upper}</h1>
+                        <p class="text-slate-600 text-lg mb-8">{description}</p>
                         
                         <!-- Quick Stats -->
                         <div class="grid grid-cols-4 gap-4 mb-8">
-                            <div class="bg-brand-900/50 border border-brand-500/20 rounded-xl p-4 text-center">
-                                <p class="anton-text text-2xl text-brand-500">{recipe['protein']}g</p>
-                                <p class="text-xs text-slate-400">Protein</p>
+                            <div class="text-center p-4 bg-slate-100 rounded-xl">
+                                <div class="text-2xl font-bold text-brand-600">{protein}g</div>
+                                <div class="text-xs text-slate-500 uppercase">Protein</div>
                             </div>
-                            <div class="bg-brand-900/50 border border-brand-500/20 rounded-xl p-4 text-center">
-                                <p class="anton-text text-2xl text-white">{recipe['calories']}</p>
-                                <p class="text-xs text-slate-400">Calories</p>
+                            <div class="text-center p-4 bg-slate-100 rounded-xl">
+                                <div class="text-2xl font-bold text-slate-900">{calories}</div>
+                                <div class="text-xs text-slate-500 uppercase">Calories</div>
                             </div>
-                            <div class="bg-brand-900/50 border border-brand-500/20 rounded-xl p-4 text-center">
-                                <p class="anton-text text-2xl text-white">{recipe['carbs']}g</p>
-                                <p class="text-xs text-slate-400">Carbs</p>
+                            <div class="text-center p-4 bg-slate-100 rounded-xl">
+                                <div class="text-2xl font-bold text-slate-900">{totalTime}m</div>
+                                <div class="text-xs text-slate-500 uppercase">Total Time</div>
                             </div>
-                            <div class="bg-brand-900/50 border border-brand-500/20 rounded-xl p-4 text-center">
-                                <p class="anton-text text-2xl text-white">{recipe['fat']}g</p>
-                                <p class="text-xs text-slate-400">Fat</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Meta Info -->
-                        <div class="flex flex-wrap gap-6 text-sm text-slate-400 mb-8">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <span><strong class="text-white">{recipe['totalTime']}</strong> minutes</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                </svg>
-                                <span><strong class="text-white">{recipe['yield']}</strong></span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                </svg>
-                                <span><strong class="text-white">{recipe['difficulty']}</strong></span>
+                            <div class="text-center p-4 bg-slate-100 rounded-xl">
+                                <div class="text-2xl font-bold text-slate-900">{yield_short}</div>
+                                <div class="text-xs text-slate-500 uppercase">Yield</div>
                             </div>
                         </div>
                         
-                        <!-- CTA -->
-                        <a href="pack-starter.html" class="inline-flex items-center gap-2 bg-brand-500 text-brand-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-brand-600 transition cyber-glow">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                            GET FREE RECIPE PACK
-                        </a>
+                        <!-- Full Nutrition -->
+                        <div class="bg-slate-100 rounded-xl p-6">
+                            <h3 class="font-bold text-slate-900 mb-4">Nutrition per {servingSize}</h3>
+                            <div class="grid grid-cols-3 gap-4 text-sm">
+                                <div class="flex justify-between"><span class="text-slate-500">Carbs</span><span class="font-semibold">{carbs}g</span></div>
+                                <div class="flex justify-between"><span class="text-slate-500">Fat</span><span class="font-semibold">{fat}g</span></div>
+                                <div class="flex justify-between"><span class="text-slate-500">Fiber</span><span class="font-semibold">{fiber}g</span></div>
+                                <div class="flex justify-between"><span class="text-slate-500">Sugar</span><span class="font-semibold">{sugar}g</span></div>
+                                <div class="flex justify-between"><span class="text-slate-500">Difficulty</span><span class="font-semibold">{difficulty}</span></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Recipe Content -->
-        <section class="py-12 border-t border-brand-500/20">
+        <section class="py-12 bg-slate-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-3 gap-12">
+                <div class="grid lg:grid-cols-3 gap-8">
                     <!-- Ingredients -->
                     <div class="lg:col-span-1">
-                        <div class="bg-brand-900/50 border border-brand-500/20 rounded-2xl p-8 sticky top-28">
-                            <h2 class="anton-text text-2xl text-white mb-6">INGREDIENTS</h2>
-                            <ul class="space-y-4 text-slate-300">
-                                {ingredients_html}
+                        <div class="bg-white rounded-2xl p-6 shadow-md sticky top-28">
+                            <h2 class="anton-text text-2xl text-slate-900 mb-6">INGREDIENTS</h2>
+                            <ul class="space-y-3">
+{ingredients_html}
                             </ul>
-                            
-                            <!-- Nutrition Summary -->
-                            <div class="mt-8 pt-8 border-t border-brand-500/20">
-                                <h3 class="anton-text text-lg text-white mb-4">NUTRITION (PER {recipe['servingSize'].upper()})</h3>
-                                <div class="space-y-3 text-sm">
-                                    <div class="flex justify-between">
-                                        <span class="text-slate-400">Calories</span>
-                                        <span class="text-white font-semibold">{recipe['calories']} kcal</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-slate-400">Protein</span>
-                                        <span class="text-brand-500 font-semibold">{recipe['protein']}g</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-slate-400">Carbs</span>
-                                        <span class="text-white font-semibold">{recipe['carbs']}g</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-slate-400">Fat</span>
-                                        <span class="text-white font-semibold">{recipe['fat']}g</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-slate-400">Fiber</span>
-                                        <span class="text-white font-semibold">{recipe['fiber']}g</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-slate-400">Sugar</span>
-                                        <span class="text-white font-semibold">{recipe['sugar']}g</span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     
                     <!-- Instructions -->
                     <div class="lg:col-span-2">
-                        <h2 class="anton-text text-2xl text-white mb-8">INSTRUCTIONS</h2>
-                        <div class="space-y-8">
-                            {instructions_html}
-                        </div>
-                        
-                        <!-- Tips -->
-                        <div class="mt-12 bg-brand-500/10 border border-brand-500/30 rounded-2xl p-8">
-                            <h3 class="anton-text text-xl text-white mb-4">PRO TIPS</h3>
-                            <ul class="space-y-3 text-slate-300">
-                                <li class="flex items-start gap-3">
-                                    <svg class="w-5 h-5 text-brand-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    <span>Use a kitchen scale for precise gram measurements to ensure accurate macros.</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <svg class="w-5 h-5 text-brand-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    <span>Store in an airtight container at room temperature for up to 5 days, or freeze for up to 3 months.</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <svg class="w-5 h-5 text-brand-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    <span>Don't overbake - cookies will continue to firm up as they cool on the baking sheet.</span>
-                                </li>
-                            </ul>
+                        <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-md">
+                            <h2 class="anton-text text-2xl text-slate-900 mb-6">INSTRUCTIONS</h2>
+                            <div class="space-y-6">
+{instructions_html}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Related Recipes -->
-        <section class="py-12 border-t border-brand-500/20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="anton-text text-3xl text-white mb-8">MORE {recipe['category'].upper()} RECIPES</h2>
-                <div class="grid md:grid-cols-3 gap-6">
-                    {related_html}
-                </div>
+        <!-- CTA -->
+        <section class="bg-brand-600 py-12">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="anton-text text-3xl text-white mb-4">WANT MORE RECIPES?</h2>
+                <p class="text-brand-100 mb-6">Get the Starter Pack with 5 essential protein cookie recipes.</p>
+                <a href="pack-starter.html" class="inline-flex items-center gap-2 bg-white text-brand-600 px-8 py-4 rounded-xl font-bold hover:bg-brand-50 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    DOWNLOAD FREE PDF
+                </a>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-brand-900 border-t border-brand-500/20 pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-                <div>
-                    <a href="/" class="flex items-center space-x-3 mb-5">
-                        <img src="images/logo.png" alt="ProteinCookies" class="h-12 w-12 rounded-xl">
-                        <span class="anton-text text-xl text-brand-500">PROTEINCOOKIES</span>
-                    </a>
-                    <p class="text-slate-400 text-sm">Macro-verified protein cookie recipes with USDA nutrition data.</p>
-                </div>
-                <div>
-                    <h4 class="anton-text text-lg mb-5 text-white">POPULAR</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="chocolate-chip-protein-cookies.html" class="text-slate-400 hover:text-brand-500">Chocolate Chip</a></li>
-                        <li><a href="peanut-butter-protein-cookies.html" class="text-slate-400 hover:text-brand-500">Peanut Butter</a></li>
-                        <li><a href="no-bake-protein-cookies.html" class="text-slate-400 hover:text-brand-500">No-Bake</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="anton-text text-lg mb-5 text-white">PACKS</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="pack-starter.html" class="text-slate-400 hover:text-brand-500">Starter Pack</a></li>
-                        <li><a href="pack-no-bake.html" class="text-slate-400 hover:text-brand-500">No-Bake Pack</a></li>
-                        <li><a href="pack-high-protein.html" class="text-slate-400 hover:text-brand-500">High Protein Pack</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="anton-text text-lg mb-5 text-white">LEGAL</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="privacy.html" class="text-slate-400 hover:text-brand-500">Privacy Policy</a></li>
-                        <li><a href="terms.html" class="text-slate-400 hover:text-brand-500">Terms of Use</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-brand-500/20 pt-8 text-center">
-                <p class="text-slate-500 text-xs">© 2026 ProteinCookies.com. All rights reserved. Data by USDA FoodData Central.</p>
-            </div>
+    <footer class="bg-slate-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-slate-400 text-sm">&copy; 2026 ProteinCookies.com. All rights reserved.</p>
+            <p class="text-slate-500 text-xs mt-2">Nutrition data verified using USDA FoodData Central.</p>
         </div>
     </footer>
 </body>
-</html>'''
-    
-    return html
+</html>
+'''
 
-# Generate all recipe pages
-for recipe in recipes:
+def generate_recipe_page(recipe):
+    """Generate a single recipe page"""
+    
+    # Build ingredients HTML
+    ingredients_html = ""
+    for ing in recipe['ingredients']:
+        ingredients_html += f'                                <li class="flex items-start gap-3"><span class="w-2 h-2 bg-brand-500 rounded-full mt-2 flex-shrink-0"></span><span class="text-slate-700">{ing}</span></li>\n'
+    
+    # Build instructions HTML
+    instructions_html = ""
+    for i, step in enumerate(recipe['instructions'], 1):
+        instructions_html += f'''                                <div class="flex gap-4">
+                                    <div class="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">{i}</div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 mb-1">{step['step']}</h3>
+                                        <p class="text-slate-600">{step['text']}</p>
+                                    </div>
+                                </div>\n'''
+    
+    # Build JSON arrays for schema
+    ingredients_json = json.dumps(recipe['ingredients'])
+    instructions_json = json.dumps([{"@type": "HowToStep", "name": s['step'], "text": s['text']} for s in recipe['instructions']])
+    
+    # Extract yield number
+    yield_short = recipe['yield'].split()[0]
+    
+    # Category slug
+    category_slug = recipe['category'].lower().replace(' ', '-')
+    
+    # Generate HTML
+    html = RECIPE_TEMPLATE.format(
+        title=recipe['title'],
+        title_upper=recipe['title'].upper(),
+        slug=recipe['slug'],
+        description=recipe['description'],
+        image=recipe['image'],
+        protein=recipe['protein'],
+        calories=recipe['calories'],
+        carbs=recipe['carbs'],
+        fat=recipe['fat'],
+        fiber=recipe['fiber'],
+        sugar=recipe['sugar'],
+        prepTime=recipe['prepTime'],
+        cookTime=recipe['cookTime'],
+        totalTime=recipe['totalTime'],
+        yield_amount=recipe['yield'],
+        yield_short=yield_short,
+        servingSize=recipe['servingSize'],
+        difficulty=recipe['difficulty'],
+        category=recipe['category'],
+        category_slug=category_slug,
+        ingredients_html=ingredients_html,
+        instructions_html=instructions_html,
+        ingredients_json=ingredients_json,
+        instructions_json=instructions_json
+    )
+    
+    # Write file
     filename = f"{recipe['slug']}.html"
-    html = generate_recipe_page(recipe)
     with open(filename, 'w') as f:
         f.write(html)
+    
     print(f"Generated: {filename}")
+    return filename
 
-print(f"\nTotal: {len(recipes)} recipe pages generated")
+
+if __name__ == '__main__':
+    print("Generating Recipe Pages for ProteinCookies.com (Light Theme)\n")
+    
+    generated_files = []
+    for recipe in recipes:
+        filename = generate_recipe_page(recipe)
+        generated_files.append(filename)
+    
+    print(f"\nTotal: {len(generated_files)} recipe pages generated")

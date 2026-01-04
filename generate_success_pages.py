@@ -1,10 +1,22 @@
 #!/usr/bin/env python3
 """
-Generate Success/Download Pages for ProteinCookies.com
+Generate Success/Download Pages for ProteinCookies.com - Light Theme
 """
 
 # Define the packs with their details
 PACKS = {
+    'starter': {
+        'title': 'STARTER PACK',
+        'subtitle': '5 Essential Protein Cookie Recipes',
+        'pdf': 'proteincookies-starter-pack.pdf',
+        'recipes': [
+            ('Chocolate Chip Protein Cookies', '21g protein per cookie'),
+            ('Peanut Butter Protein Cookies', '24g protein per cookie'),
+            ('No-Bake Protein Cookies', '18g protein per cookie'),
+            ('Oatmeal Raisin Protein Cookies', '19g protein per cookie'),
+            ('Double Chocolate Protein Cookies', '22g protein per cookie'),
+        ]
+    },
     'no-bake': {
         'title': 'NO-BAKE PACK',
         'subtitle': 'Quick Recipes Ready in 15 Minutes',
@@ -46,7 +58,7 @@ PACKS = {
             ('Protein Cookies for Kids', '12g protein per cookie'),
             ('Birthday Cake Protein Cookies', '19g protein per cookie'),
             ('Chocolate Chip Protein Cookies', '21g protein per cookie'),
-            ('Peanut Butter Protein Cookies', '24g protein per cookie'),
+            ('Banana Oat Protein Cookies', '17g protein per cookie'),
         ]
     },
     'high-protein': {
@@ -73,7 +85,7 @@ TEMPLATE = '''<!DOCTYPE html>
     <meta name="description" content="Download your {title} with protein cookie recipes.">
     <meta name="robots" content="noindex, nofollow">
     
-    <meta name="theme-color" content="#00D4FF">
+    <meta name="theme-color" content="#f59e0b">
     <link rel="icon" type="image/png" href="/images/favicon.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -92,9 +104,14 @@ TEMPLATE = '''<!DOCTYPE html>
                     }},
                     colors: {{
                         brand: {{
-                            500: '#00D4FF',
-                            600: '#00B8E6',
-                            900: '#0a1628',
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            900: '#451a03',
+                        }},
+                        accent: {{
+                            500: '#10b981',
                         }}
                     }}
                 }}
@@ -103,7 +120,7 @@ TEMPLATE = '''<!DOCTYPE html>
     </script>
     <style>
         .anton-text {{ font-family: 'Anton', sans-serif; letter-spacing: 0.05em; }}
-        .glass-nav {{ background: rgba(10, 22, 40, 0.9); backdrop-filter: blur(12px); }}
+        .glass-nav {{ background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }}
         @keyframes checkmark {{
             0% {{ transform: scale(0); opacity: 0; }}
             50% {{ transform: scale(1.2); }}
@@ -113,13 +130,13 @@ TEMPLATE = '''<!DOCTYPE html>
     </style>
 </head>
 
-<body class="min-h-screen bg-brand-900 text-white font-sans">
-    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 border-b border-brand-500/20">
+<body class="min-h-screen bg-slate-50 text-slate-900 font-sans">
+    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <a href="/" class="flex items-center space-x-3">
-                    <img src="images/logo.png" alt="ProteinCookies" class="h-12 w-12 rounded-xl">
-                    <span class="anton-text text-2xl text-brand-500">PROTEINCOOKIES</span>
+                    <img src="images/logo.png" alt="ProteinCookies" class="h-12 w-12 rounded-xl shadow-lg">
+                    <span class="anton-text text-2xl text-brand-600">PROTEINCOOKIES</span>
                 </a>
             </div>
         </div>
@@ -129,49 +146,49 @@ TEMPLATE = '''<!DOCTYPE html>
         <section class="py-20">
             <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <div class="mb-8">
-                    <div class="w-24 h-24 bg-brand-500/20 rounded-full mx-auto flex items-center justify-center">
-                        <svg class="w-12 h-12 text-brand-500 animate-checkmark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-24 h-24 bg-accent-500/20 rounded-full mx-auto flex items-center justify-center">
+                        <svg class="w-12 h-12 text-accent-500 animate-checkmark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
                         </svg>
                     </div>
                 </div>
                 
-                <span class="inline-block px-4 py-1 bg-brand-500/20 text-brand-500 text-sm font-bold rounded-full mb-4">SUCCESS!</span>
+                <span class="inline-block px-4 py-1 bg-accent-500/20 text-accent-500 text-sm font-bold rounded-full mb-4">SUCCESS!</span>
                 
-                <h1 class="anton-text text-4xl lg:text-5xl text-white mb-4">YOUR {title_upper} IS READY</h1>
+                <h1 class="anton-text text-4xl lg:text-5xl text-slate-900 mb-4">YOUR {title_upper} IS READY</h1>
                 
-                <p class="text-slate-400 text-lg mb-8">{subtitle}</p>
+                <p class="text-slate-500 text-lg mb-8">{subtitle}</p>
                 
-                <a href="guides/{pdf}" download class="inline-flex items-center justify-center gap-3 bg-brand-500 text-brand-900 px-10 py-4 rounded-xl font-bold text-lg hover:bg-brand-600 transition shadow-lg shadow-brand-500/30 mb-8">
+                <a href="guides/{pdf}" download class="inline-flex items-center justify-center gap-3 bg-brand-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-brand-700 transition shadow-lg shadow-brand-500/30 mb-8">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                     </svg>
                     DOWNLOAD PDF
                 </a>
                 
-                <div class="bg-brand-900/50 border border-brand-500/20 rounded-2xl p-8 text-left mt-12">
-                    <h2 class="anton-text text-xl text-white mb-6">WHAT'S INSIDE YOUR PACK</h2>
+                <div class="bg-white border border-slate-200 rounded-2xl p-8 text-left mt-12 shadow-md">
+                    <h2 class="anton-text text-xl text-slate-900 mb-6">WHAT'S INSIDE YOUR PACK</h2>
                     
                     <div class="space-y-4">
 {recipe_list}
                     </div>
                     
-                    <div class="border-t border-brand-500/20 mt-6 pt-6">
-                        <p class="text-slate-400 text-sm">Plus: Shopping list, nutrition facts, storage tips, and printable recipe cards!</p>
+                    <div class="border-t border-slate-200 mt-6 pt-6">
+                        <p class="text-slate-500 text-sm">Plus: Shopping list, nutrition facts, storage tips, and printable recipe cards!</p>
                     </div>
                 </div>
                 
                 <div class="mt-12">
-                    <p class="text-slate-400 mb-4">Want more recipes?</p>
-                    <a href="/" class="text-brand-500 font-semibold hover:underline">Browse all 25+ recipes &rarr;</a>
+                    <p class="text-slate-500 mb-4">Want more recipes?</p>
+                    <a href="/" class="text-brand-600 font-semibold hover:underline">Browse all 25+ recipes &rarr;</a>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-brand-900 border-t border-brand-500/20 py-8">
+    <footer class="bg-slate-900 text-white py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-slate-500 text-xs">&copy; 2026 ProteinCookies.com. All rights reserved.</p>
+            <p class="text-slate-400 text-sm">&copy; 2026 ProteinCookies.com. All rights reserved.</p>
         </div>
     </footer>
 </body>
@@ -179,12 +196,12 @@ TEMPLATE = '''<!DOCTYPE html>
 '''
 
 RECIPE_ITEM_TEMPLATE = '''                        <div class="flex items-start gap-3">
-                            <div class="w-6 h-6 bg-brand-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <span class="text-brand-500 text-sm font-bold">{num}</span>
+                            <div class="w-6 h-6 bg-brand-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span class="text-brand-600 text-sm font-bold">{num}</span>
                             </div>
                             <div>
-                                <p class="text-white font-semibold">{name}</p>
-                                <p class="text-slate-400 text-sm">{protein}</p>
+                                <p class="text-slate-900 font-semibold">{name}</p>
+                                <p class="text-slate-500 text-sm">{protein}</p>
                             </div>
                         </div>'''
 
@@ -218,7 +235,7 @@ def generate_success_page(pack_key, pack_info):
 
 
 if __name__ == '__main__':
-    print('Generating Success Pages for ProteinCookies.com\n')
+    print('Generating Success Pages for ProteinCookies.com (Light Theme)\n')
     
     generated_files = []
     for pack_key, pack_info in PACKS.items():

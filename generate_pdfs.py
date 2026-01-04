@@ -92,8 +92,8 @@ class CookiePDF(FPDF):
     def __init__(self, pack_name):
         super().__init__()
         self.pack_name = pack_name
-        self.brand_color = (0, 212, 255)  # Cyan
-        self.dark_bg = (10, 22, 40)
+        self.brand_color = (245, 158, 11)  # Amber
+        self.dark_bg = (15, 23, 42)  # Slate-900
         
     def header(self):
         if self.page_no() > 1:
